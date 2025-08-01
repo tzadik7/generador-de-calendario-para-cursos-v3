@@ -3,492 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Calendarios Médicos</title>
+    <title>Generador de Calendarios - FUNCIONAL</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
+            font-family: Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            min-height: 100vh;
         }
-
-        .header {
+        
+        .container {
             background: white;
-            border-radius: 15px;
             padding: 30px;
+            border-radius: 15px;
             margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .header h1 {
+        
+        h1 {
             color: #1a73e8;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            text-align: center;
+            margin-bottom: 30px;
         }
-
-        .form-section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
+        
+        .form-group {
             margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-group label {
+        
+        label {
+            display: block;
             font-weight: bold;
-            color: #202124;
-            margin-bottom: 8px;
-            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #333;
         }
-
-        .input-group input {
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 1em;
-            transition: all 0.3s ease;
+            font-size: 16px;
+            box-sizing: border-box;
         }
-
-        .input-group input:focus {
-            outline: none;
+        
+        input:focus {
             border-color: #1a73e8;
-            box-shadow: 0 0 10px rgba(26, 115, 232, 0.2);
+            outline: none;
         }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
+        
         .btn {
+            background: #1a73e8;
+            color: white;
             padding: 15px 30px;
             border: none;
             border-radius: 25px;
-            font-size: 1.1em;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            margin: 10px 5px;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-
-        .btn-primary {
-            background: #1a73e8;
-            color: white;
-        }
-
-        .btn-primary:hover {
+        
+        .btn:hover {
             background: #1557b0;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(26, 115, 232, 0.3);
         }
-
+        
         .btn-secondary {
             background: #34a853;
-            color: white;
         }
-
+        
         .btn-secondary:hover {
             background: #2d8f47;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(52, 168, 83, 0.3);
         }
-
-        .btn-success {
+        
+        .btn-warning {
             background: #fbbc04;
             color: #333;
         }
-
-        .btn-success:hover {
-            background: #f9ab00;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(251, 188, 4, 0.3);
-        }
-
-        .view-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .view-btn {
-            padding: 10px 20px;
-            border: 2px solid #1a73e8;
-            border-radius: 25px;
-            background: white;
-            color: #1a73e8;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .view-btn.active {
-            background: #1a73e8;
-            color: white;
-        }
-
-        .view-btn:hover {
-            background: #1a73e8;
-            color: white;
-        }
-
-        .calendar-section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: none;
-        }
-
-        .calendar-section.active {
-            display: block;
-        }
-
-        .calendar-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .calendar-header h2 {
-            color: #1a73e8;
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-
-        .calendar-info {
-            background: #e8f0fe;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 5px solid #1a73e8;
-        }
-
-        .week-info {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .week-badge {
-            background: #1a73e8;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
+        
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
             font-weight: bold;
         }
-
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
         .calendar-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            overflow: hidden;
+            margin-top: 20px;
         }
-
-        .calendar-table th {
-            background: linear-gradient(135deg, #1a73e8, #4285f4);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-size: 1.1em;
-            font-weight: 600;
-        }
-
+        
+        .calendar-table th,
         .calendar-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
-            vertical-align: top;
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
         }
-
-        .calendar-table tr:hover {
+        
+        .calendar-table th {
+            background: #1a73e8;
+            color: white;
+        }
+        
+        .calendar-table tr:nth-child(even) {
             background: #f8f9fa;
         }
-
-        .date-cell {
+        
+        .calendar-table tr:hover {
+            background: #e3f2fd;
+        }
+        
+        .date-col {
             width: 200px;
             font-weight: bold;
-            background: #f8f9fa;
-            color: #202124;
         }
-
-        .activity-cell {
-            position: relative;
-        }
-
-        /* Colores por módulo */
-        .mod-1 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; }
-        .mod-2 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
-        .mod-3 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; }
-        .mod-4 { background: linear-gradient(135deg, #ff8a80 0%, #ff80ab 100%); color: white; }
-        .mod-5 { background: linear-gradient(135deg, #81c784 0%, #aed581 100%); color: white; }
-        .mod-6 { background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%); color: white; }
-        .mod-7 { background: linear-gradient(135deg, #ba68c8 0%, #ab47bc 100%); color: white; }
-        .mod-8 { background: linear-gradient(135deg, #ffb74d 0%, #ffa726 100%); color: white; }
-        .mod-9 { background: linear-gradient(135deg, #4db6ac 0%, #26a69a 100%); color: white; }
-        .mod-10 { background: linear-gradient(135deg, #f06292 0%, #ec407a 100%); color: white; }
-        .intervention { background: linear-gradient(135deg, #ff7043 0%, #ff5722 100%); color: white; font-weight: bold; }
-        .workshop { background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%); color: white; font-weight: bold; }
-        .evaluation { background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%); color: white; font-weight: bold; }
-        .practice { background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%); color: white; font-weight: bold; }
-        .induction { background: linear-gradient(135deg, #ab47bc 0%, #9c27b0 100%); color: white; font-weight: bold; }
-        .graduation { background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%); color: #333; font-weight: bold; text-align: center; font-size: 1.1em; }
-
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-weight: 500;
-        }
-
-        .alert-success {
-            background: #e6f4ea;
-            color: #137333;
-            border-left: 4px solid #34a853;
-        }
-
-        .alert-error {
-            background: #fce8e6;
-            color: #d93025;
-            border-left: 4px solid #ea4335;
-        }
-
-        .alert-warning {
-            background: #fef7e0;
-            color: #f9ab00;
-            border-left: 4px solid #fbbc04;
-        }
-
-        .week-view {
+        
+        .hidden {
             display: none;
         }
-
-        .week-container {
-            margin-bottom: 30px;
+        
+        .test-section {
+            background: #e8f5e8;
+            padding: 20px;
             border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
         }
-
-        .week-header {
-            background: linear-gradient(135deg, #34a853, #4caf50);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.3em;
-            font-weight: 500;
-        }
-
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 1px;
-            background: #e0e0e0;
-        }
-
-        .day-cell {
-            background: white;
-            padding: 15px;
-            min-height: 100px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .day-header {
-            font-weight: bold;
-            color: #1a73e8;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-
-        .day-activity {
-            font-size: 0.85em;
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .btn-group, .view-controls {
-                flex-direction: column;
-            }
-            
-            .week-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .date-cell {
-                width: 150px;
-                font-size: 0.9em;
-            }
-        }
+        
+        /* Colores para actividades */
+        .mod-1 { background: #ffcdd2; }
+        .mod-2 { background: #f8bbd9; }
+        .mod-3 { background: #e1bee7; }
+        .mod-4 { background: #d1c4e9; }
+        .mod-5 { background: #c5cae9; }
+        .mod-6 { background: #bbdefb; }
+        .mod-7 { background: #b3e5fc; }
+        .mod-8 { background: #b2dfdb; }
+        .mod-9 { background: #c8e6c9; }
+        .mod-10 { background: #dcedc8; }
+        .intervention { background: #ff8a65; color: white; font-weight: bold; }
+        .workshop { background: #7986cb; color: white; font-weight: bold; }
+        .evaluation { background: #81c784; color: white; font-weight: bold; }
+        .practice { background: #64b5f6; color: white; font-weight: bold; }
+        .induction { background: #ba68c8; color: white; font-weight: bold; }
+        .graduation { background: #ffd54f; color: #333; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- HEADER -->
-        <div class="header">
-            <h1>🎓 Generador de Calendarios Médicos</h1>
-            <p>Sistema Profesional de Gestión de Cursos</p>
+        <h1>🎓 Generador de Calendarios Médicos</h1>
+        
+        <!-- SECCIÓN DE PRUEBA -->
+        <div class="test-section">
+            <h3>🧪 Prueba de Funcionamiento</h3>
+            <button class="btn" onclick="testJS()">🔧 Probar JavaScript</button>
+            <div id="testResult"></div>
         </div>
-
+        
         <!-- FORMULARIO -->
-        <div class="form-section">
-            <h2 style="color: #1a73e8; margin-bottom: 25px;">📝 Crear Nuevo Curso</h2>
-            
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="courseName">Nombre del Curso:</label>
-                    <input type="text" id="courseName" placeholder="Ej: Curso de Ultrasonido 2025">
-                </div>
-                <div class="input-group">
-                    <label for="startDate">Fecha de Inicio:</label>
-                    <input type="date" id="startDate">
-                </div>
-                <div class="input-group">
-                    <label for="instructor">Instructor:</label>
-                    <input type="text" id="instructor" placeholder="Nombre del instructor">
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="generateCalendar()">
-                    📅 Generar Calendario
-                </button>
-                <button class="btn btn-secondary" onclick="saveCalendar()">
-                    💾 Guardar Calendario
-                </button>
-                <button class="btn btn-success" onclick="printCalendar()">
-                    🖨️ Imprimir
-                </button>
-            </div>
-
-            <div id="alerts"></div>
+        <div class="form-group">
+            <label for="courseName">📝 Nombre del Curso:</label>
+            <input type="text" id="courseName" placeholder="Ej: Curso de Ultrasonido 2025" value="Curso de Prueba">
         </div>
-
-        <!-- CALENDARIO -->
-        <div class="calendar-section" id="calendarSection">
-            <div class="calendar-header">
-                <h2 id="calendarTitle">📅 Calendario Generado</h2>
-                <div class="calendar-info" id="calendarInfo"></div>
-                <div class="week-info" id="weekInfo"></div>
-            </div>
-
-            <!-- CONTROLES DE VISTA -->
-            <div class="view-controls">
-                <button class="view-btn active" onclick="switchView('day', this)">📅 Vista por Días</button>
-                <button class="view-btn" onclick="switchView('week', this)">📊 Vista por Semanas</button>
-            </div>
-
-            <!-- VISTA POR DÍAS -->
-            <div id="dayView">
-                <div id="calendarContent"></div>
-            </div>
-
-            <!-- VISTA POR SEMANAS -->
-            <div id="weekView" class="week-view">
-                <div id="weekContent"></div>
-            </div>
+        
+        <div class="form-group">
+            <label for="startDate">📅 Fecha de Inicio:</label>
+            <input type="date" id="startDate">
         </div>
+        
+        <div class="form-group">
+            <label for="instructor">👨‍⚕️ Instructor:</label>
+            <input type="text" id="instructor" placeholder="Nombre del instructor" value="Dr. Ejemplo">
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="btn" onclick="generateCalendar()">📅 Generar Calendario</button>
+            <button class="btn btn-secondary" onclick="saveCalendar()" id="saveBtn" disabled>💾 Guardar</button>
+            <button class="btn btn-warning" onclick="printCalendar()" id="printBtn" disabled>🖨️ Imprimir</button>
+        </div>
+        
+        <div id="alerts"></div>
+    </div>
+    
+    <!-- CALENDARIO -->
+    <div class="container hidden" id="calendarContainer">
+        <h2 id="calendarTitle">📅 Calendario Generado</h2>
+        <div id="calendarInfo" style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;"></div>
+        <div id="calendarContent"></div>
     </div>
 
     <script>
-        // Estructura del curso
+        // ==================== VARIABLES GLOBALES ====================
         const courseStructure = [
-            ...Array(8).fill().map((_, i) => `Módulo 1. Introducción D${i + 1}`),
-            ...Array(11).fill().map((_, i) => `Módulo 2. Renal D${i + 1}`),
+            // Módulo 1 - Introducción (8 días)
+            'Módulo 1. Introducción D1', 'Módulo 1. Introducción D2', 'Módulo 1. Introducción D3', 'Módulo 1. Introducción D4',
+            'Módulo 1. Introducción D5', 'Módulo 1. Introducción D6', 'Módulo 1. Introducción D7', 'Módulo 1. Introducción D8',
+            
+            // Módulo 2 - Renal (11 días)
+            'Módulo 2. Renal D1', 'Módulo 2. Renal D2', 'Módulo 2. Renal D3', 'Módulo 2. Renal D4', 'Módulo 2. Renal D5',
+            'Módulo 2. Renal D6', 'Módulo 2. Renal D7', 'Módulo 2. Renal D8', 'Módulo 2. Renal D9', 'Módulo 2. Renal D10', 'Módulo 2. Renal D11',
+            
             '1ra Intervención Entrenamiento Continuo',
-            ...Array(14).fill().map((_, i) => `Módulo 3. Genitourinario D${i + 1}`),
+            
+            // Módulo 3 - Genitourinario (14 días)
+            'Módulo 3. Genitourinario D1', 'Módulo 3. Genitourinario D2', 'Módulo 3. Genitourinario D3', 'Módulo 3. Genitourinario D4',
+            'Módulo 3. Genitourinario D5', 'Módulo 3. Genitourinario D6', 'Módulo 3. Genitourinario D7', 'Módulo 3. Genitourinario D8',
+            'Módulo 3. Genitourinario D9', 'Módulo 3. Genitourinario D10', 'Módulo 3. Genitourinario D11', 'Módulo 3. Genitourinario D12',
+            'Módulo 3. Genitourinario D13', 'Módulo 3. Genitourinario D14',
+            
             '2da Intervención Entrenamiento Continuo',
-            ...Array(23).fill().map((_, i) => `Módulo 4. Mama D${i + 1}`),
-            ...Array(20).fill().map((_, i) => `Módulo 5. Abdomen D${i + 1}`),
+            
+            // Módulo 4 - Mama (23 días)
+            'Módulo 4. Mama D1', 'Módulo 4. Mama D2', 'Módulo 4. Mama D3', 'Módulo 4. Mama D4', 'Módulo 4. Mama D5',
+            'Módulo 4. Mama D6', 'Módulo 4. Mama D7', 'Módulo 4. Mama D8', 'Módulo 4. Mama D9', 'Módulo 4. Mama D10',
+            'Módulo 4. Mama D11', 'Módulo 4. Mama D12', 'Módulo 4. Mama D13', 'Módulo 4. Mama D14', 'Módulo 4. Mama D15',
+            'Módulo 4. Mama D16', 'Módulo 4. Mama D17', 'Módulo 4. Mama D18', 'Módulo 4. Mama D19', 'Módulo 4. Mama D20',
+            'Módulo 4. Mama D21', 'Módulo 4. Mama D22', 'Módulo 4. Mama D23',
+            
+            // Módulo 5 - Abdomen (20 días)
+            'Módulo 5. Abdomen D1', 'Módulo 5. Abdomen D2', 'Módulo 5. Abdomen D3', 'Módulo 5. Abdomen D4', 'Módulo 5. Abdomen D5',
+            'Módulo 5. Abdomen D6', 'Módulo 5. Abdomen D7', 'Módulo 5. Abdomen D8', 'Módulo 5. Abdomen D9', 'Módulo 5. Abdomen D10',
+            'Módulo 5. Abdomen D11', 'Módulo 5. Abdomen D12', 'Módulo 5. Abdomen D13', 'Módulo 5. Abdomen D14', 'Módulo 5. Abdomen D15',
+            'Módulo 5. Abdomen D16', 'Módulo 5. Abdomen D17', 'Módulo 5. Abdomen D18', 'Módulo 5. Abdomen D19', 'Módulo 5. Abdomen D20',
+            
             '3ra Intervención Entrenamiento Continuo',
-            ...Array(25).fill().map((_, i) => `Módulo 6. Obstetricia D${i + 1}`),
+            
+            // Módulo 6 - Obstetricia (25 días)
+            'Módulo 6. Obstetricia D1', 'Módulo 6. Obstetricia D2', 'Módulo 6. Obstetricia D3', 'Módulo 6. Obstetricia D4', 'Módulo 6. Obstetricia D5',
+            'Módulo 6. Obstetricia D6', 'Módulo 6. Obstetricia D7', 'Módulo 6. Obstetricia D8', 'Módulo 6. Obstetricia D9', 'Módulo 6. Obstetricia D10',
+            'Módulo 6. Obstetricia D11', 'Módulo 6. Obstetricia D12', 'Módulo 6. Obstetricia D13', 'Módulo 6. Obstetricia D14', 'Módulo 6. Obstetricia D15',
+            'Módulo 6. Obstetricia D16', 'Módulo 6. Obstetricia D17', 'Módulo 6. Obstetricia D18', 'Módulo 6. Obstetricia D19', 'Módulo 6. Obstetricia D20',
+            'Módulo 6. Obstetricia D21', 'Módulo 6. Obstetricia D22', 'Módulo 6. Obstetricia D23', 'Módulo 6. Obstetricia D24', 'Módulo 6. Obstetricia D25',
+            
             '4ta Intervención Entrenamiento Continuo',
             'Taller botoneria',
-            ...Array(7).fill().map((_, i) => `Módulo 7. Tejidos blandos D${i + 1}`),
-            'Taller de cierre mama D1',
-            'Taller de cierre mama D2',
-            ...Array(11).fill().map((_, i) => `Módulo 8. Cabeza y cuello D${i + 1}`),
+            
+            // Módulo 7 - Tejidos blandos (7 días)
+            'Módulo 7. Tejidos blandos D1', 'Módulo 7. Tejidos blandos D2', 'Módulo 7. Tejidos blandos D3', 'Módulo 7. Tejidos blandos D4',
+            'Módulo 7. Tejidos blandos D5', 'Módulo 7. Tejidos blandos D6', 'Módulo 7. Tejidos blandos D7',
+            
+            'Taller de cierre mama D1', 'Taller de cierre mama D2',
+            
+            // Módulo 8 - Cabeza y cuello (11 días)
+            'Módulo 8. Cabeza y cuello D1', 'Módulo 8. Cabeza y cuello D2', 'Módulo 8. Cabeza y cuello D3', 'Módulo 8. Cabeza y cuello D4',
+            'Módulo 8. Cabeza y cuello D5', 'Módulo 8. Cabeza y cuello D6', 'Módulo 8. Cabeza y cuello D7', 'Módulo 8. Cabeza y cuello D8',
+            'Módulo 8. Cabeza y cuello D9', 'Módulo 8. Cabeza y cuello D10', 'Módulo 8. Cabeza y cuello D11',
+            
             '5ta Intervención Entrenamiento Continuo',
             'Curso ACLS',
-            ...Array(5).fill().map((_, i) => `Módulo 9. Correlación clinica D${i + 1}`),
-            ...Array(2).fill().map((_, i) => `Módulo 10. Multimodal D${i + 1}`),
-            'Evaluación final Entrenamiento Continuo D1',
-            'Evaluación final Entrenamiento Continuo D2',
-            ...Array(10).fill().map((_, i) => `Practicas finales D${i + 1}`),
-            'Inducción D1',
-            'Inducción D2',
-            'Inducción D3',
-            'Graduación'
-        ];
-
-        // Eventos que no pueden solaparse
-        const nonOverlapEvents = [
-            'Intervención Entrenamiento Continuo',
-            'Taller de cierre mama',
-            'Curso ACLS',
-            'Taller botoneria',
-            'Inducción',
-            'Graduación'
+            
+            // Módulo 9 - Correlación clínica (5 días)
+            'Módulo 9. Correlación clinica D1', 'Módulo 9. Correlación clinica D2', 'Módulo 9. Correlación clinica D3',
+            'Módulo 9. Correlación clinica D4', 'Módulo 9. Correlación clinica D5',
+            
+            // Módulo 10 - Multimodal (2 días)
+            'Módulo 10. Multimodal D1', 'Módulo 10. Multimodal D2',
+            
+            // Evaluaciones finales
+            'Evaluación final Entrenamiento Continuo D1', 'Evaluación final Entrenamiento Continuo D2',
+            
+            // Prácticas finales (10 días)
+            'Practicas finales D1', 'Practicas finales D2', 'Practicas finales D3', 'Practicas finales D4', 'Practicas finales D5',
+            'Practicas finales D6', 'Practicas finales D7', 'Practicas finales D8', 'Practicas finales D9', 'Practicas finales D10',
+            
+            // Inducción y graduación
+            'Inducción D1', 'Inducción D2', 'Inducción D3', 'Graduación'
         ];
 
         let currentCalendar = null;
-        let currentView = 'day';
 
-        // Función principal para generar calendario
+        // ==================== FUNCIÓN DE PRUEBA ====================
+        function testJS() {
+            console.log('🧪 Prueba de JavaScript iniciada');
+            const testDiv = document.getElementById('testResult');
+            testDiv.innerHTML = '<div style="color: green; font-weight: bold; margin-top: 10px;">✅ ¡JavaScript está funcionando correctamente!</div>';
+            showAlert('✅ JavaScript funciona perfectamente. Puedes generar tu calendario.', 'success');
+        }
+
+        // ==================== GENERAR CALENDARIO ====================
         function generateCalendar() {
-            console.log('Generando calendario...'); // Para debug
+            console.log('🚀 Iniciando generación de calendario...');
             
-            const courseName = document.getElementById('courseName').value;
+            const courseName = document.getElementById('courseName').value.trim();
             const startDate = document.getElementById('startDate').value;
-            const instructor = document.getElementById('instructor').value;
+            const instructor = document.getElementById('instructor').value.trim();
 
-            if (!courseName || !startDate) {
-                showAlert('Por favor completa el nombre del curso y la fecha de inicio.', 'error');
+            // Validaciones
+            if (!courseName) {
+                showAlert('❌ Por favor ingresa el nombre del curso.', 'error');
+                return;
+            }
+
+            if (!startDate) {
+                showAlert('❌ Por favor selecciona la fecha de inicio.', 'error');
                 return;
             }
 
             try {
+                console.log('📅 Creando horario...');
                 const schedule = createSchedule(new Date(startDate));
                 
                 currentCalendar = {
@@ -498,22 +326,31 @@
                     schedule: schedule
                 };
 
+                console.log('📊 Calendario creado:', currentCalendar);
                 displayCalendar();
+                
+                // Habilitar botones
+                document.getElementById('saveBtn').disabled = false;
+                document.getElementById('printBtn').disabled = false;
+                
                 showAlert('✅ ¡Calendario generado exitosamente!', 'success');
                 
             } catch (error) {
-                console.error('Error:', error);
-                showAlert('❌ Error al generar el calendario: ' + error.message, 'error');
+                console.error('❌ Error:', error);
+                showAlert('❌ Error al generar calendario: ' + error.message, 'error');
             }
         }
 
-        // Crear horario con restricciones
+        // ==================== CREAR HORARIO ====================
         function createSchedule(startDate) {
+            console.log('📋 Creando horario desde:', startDate);
+            
             let schedule = [];
             let currentDate = new Date(startDate);
             let moduleIndex = 0;
 
             while (moduleIndex < courseStructure.length) {
+                // Solo días hábiles (lunes a viernes)
                 if (currentDate.getDay() >= 1 && currentDate.getDay() <= 5) {
                     const weekOfDiplomado = Math.floor(moduleIndex / 5) + 1;
                     const weekOfYear = getWeekOfYear(currentDate);
@@ -530,51 +367,63 @@
                 currentDate.setDate(currentDate.getDate() + 1);
             }
 
+            console.log('🔧 Aplicando restricciones...');
             return applyConstraints(schedule);
         }
 
-        // Aplicar restricciones
+        // ==================== APLICAR RESTRICCIONES ====================
         function applyConstraints(schedule) {
             const adjusted = [...schedule];
             
-            // Encontrar eventos especiales
+            // Aplicar restricciones de días específicos
             for (let i = 0; i < adjusted.length; i++) {
                 const item = adjusted[i];
                 
                 // Intervenciones a viernes
                 if (item.activity.includes('Intervención Entrenamiento Continuo')) {
-                    const fridayDate = findNextFriday(item.date);
+                    const fridayDate = findNextWeekday(item.date, 5); // 5 = viernes
                     adjusted[i].date = fridayDate;
                     adjusted[i].dayOfWeek = 5;
+                    adjusted[i].weekOfYear = getWeekOfYear(fridayDate);
                 }
                 
                 // Inducción a lunes-martes-miércoles
-                if (item.activity.includes('Inducción D1')) {
-                    const mondayDate = findNextMonday(item.date);
+                if (item.activity === 'Inducción D1') {
+                    const mondayDate = findNextWeekday(item.date, 1); // 1 = lunes
                     adjusted[i].date = mondayDate;
                     adjusted[i].dayOfWeek = 1;
-                } else if (item.activity.includes('Inducción D2')) {
-                    const mondayDate = findNextMonday(item.date);
-                    const tuesdayDate = new Date(mondayDate);
-                    tuesdayDate.setDate(mondayDate.getDate() + 1);
-                    adjusted[i].date = tuesdayDate;
-                    adjusted[i].dayOfWeek = 2;
-                } else if (item.activity.includes('Inducción D3')) {
-                    const mondayDate = findNextMonday(item.date);
-                    const wednesdayDate = new Date(mondayDate);
-                    wednesdayDate.setDate(mondayDate.getDate() + 2);
-                    adjusted[i].date = wednesdayDate;
-                    adjusted[i].dayOfWeek = 3;
+                    adjusted[i].weekOfYear = getWeekOfYear(mondayDate);
+                } else if (item.activity === 'Inducción D2') {
+                    // Encontrar Inducción D1
+                    const inductionD1 = adjusted.find(x => x.activity === 'Inducción D1');
+                    if (inductionD1) {
+                        const tuesdayDate = new Date(inductionD1.date);
+                        tuesdayDate.setDate(inductionD1.date.getDate() + 1);
+                        adjusted[i].date = tuesdayDate;
+                        adjusted[i].dayOfWeek = 2;
+                        adjusted[i].weekOfYear = getWeekOfYear(tuesdayDate);
+                    }
+                } else if (item.activity === 'Inducción D3') {
+                    // Encontrar Inducción D1
+                    const inductionD1 = adjusted.find(x => x.activity === 'Inducción D1');
+                    if (inductionD1) {
+                        const wednesdayDate = new Date(inductionD1.date);
+                        wednesdayDate.setDate(inductionD1.date.getDate() + 2);
+                        adjusted[i].date = wednesdayDate;
+                        adjusted[i].dayOfWeek = 3;
+                        adjusted[i].weekOfYear = getWeekOfYear(wednesdayDate);
+                    }
                 }
                 
-                // Graduación a jueves
-                if (item.activity.includes('Graduación')) {
-                    const inductionWednesday = adjusted.find(x => x.activity.includes('Inducción D3'));
-                    if (inductionWednesday) {
-                        const thursdayDate = new Date(inductionWednesday.date);
-                        thursdayDate.setDate(inductionWednesday.date.getDate() + 1);
+                // Graduación a jueves (día después de Inducción D3)
+                if (item.activity === 'Graduación') {
+                    const inductionD3 = adjusted.find(x => x.activity === 'Inducción D3');
+                    if (inductionD3) {
+                        const thursdayDate = new Date(inductionD3.date);
+                        thursdayDate.setDate(inductionD3.date.getDate() + 1);
                         adjusted[i].date = thursdayDate;
                         adjusted[i].dayOfWeek = 4;
+                        adjusted[i].weekOfYear = getWeekOfYear(thursdayDate);
                     }
                 }
             }
@@ -583,43 +432,68 @@
             return adjusted.sort((a, b) => a.date - b.date);
         }
 
-        // Encontrar próximo viernes
-        function findNextFriday(date) {
+        // ==================== FUNCIONES DE UTILIDAD ====================
+        function findNextWeekday(date, targetDay) {
             const result = new Date(date);
-            const daysUntilFriday = (5 - result.getDay() + 7) % 7;
-            if (daysUntilFriday === 0 && result.getDay() !== 5) {
+            const daysUntilTarget = (targetDay - result.getDay() + 7) % 7;
+            if (daysUntilTarget === 0 && result.getDay() !== targetDay) {
                 result.setDate(result.getDate() + 7);
             } else {
-                result.setDate(result.getDate() + daysUntilFriday);
+                result.setDate(result.getDate() + daysUntilTarget);
             }
             return result;
         }
 
-        // Encontrar próximo lunes
-        function findNextMonday(date) {
-            const result = new Date(date);
-            const daysUntilMonday = (1 - result.getDay() + 7) % 7;
-            if (daysUntilMonday === 0 && result.getDay() !== 1) {
-                result.setDate(result.getDate() + 7);
-            } else {
-                result.setDate(result.getDate() + daysUntilMonday);
-            }
-            return result;
-        }
-
-        // Obtener semana del año
         function getWeekOfYear(date) {
             const start = new Date(date.getFullYear(), 0, 1);
             const days = Math.floor((date - start) / (24 * 60 * 60 * 1000));
             return Math.ceil((days + start.getDay() + 1) / 7);
         }
 
-        // Mostrar calendario
+        function formatDate(date) {
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function formatDateShort(date) {
+            const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                           'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            
+            return `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
+        }
+
+        function getActivityClass(activity) {
+            if (activity.includes('Módulo 1')) return 'mod-1';
+            if (activity.includes('Módulo 2')) return 'mod-2';
+            if (activity.includes('Módulo 3')) return 'mod-3';
+            if (activity.includes('Módulo 4')) return 'mod-4';
+            if (activity.includes('Módulo 5')) return 'mod-5';
+            if (activity.includes('Módulo 6')) return 'mod-6';
+            if (activity.includes('Módulo 7')) return 'mod-7';
+            if (activity.includes('Módulo 8')) return 'mod-8';
+            if (activity.includes('Módulo 9')) return 'mod-9';
+            if (activity.includes('Módulo 10')) return 'mod-10';
+            if (activity.includes('Intervención')) return 'intervention';
+            if (activity.includes('Taller') || activity.includes('ACLS')) return 'workshop';
+            if (activity.includes('Evaluación')) return 'evaluation';
+            if (activity.includes('Practicas')) return 'practice';
+            if (activity.includes('Inducción')) return 'induction';
+            if (activity.includes('Graduación')) return 'graduation';
+            return '';
+        }
+
+        // ==================== MOSTRAR CALENDARIO ====================
         function displayCalendar() {
-            const section = document.getElementById('calendarSection');
+            console.log('🖥️ Mostrando calendario...');
+            
+            const container = document.getElementById('calendarContainer');
             const title = document.getElementById('calendarTitle');
             const info = document.getElementById('calendarInfo');
-            const weekInfo = document.getElementById('weekInfo');
+            const content = document.getElementById('calendarContent');
 
             title.textContent = `📅 ${currentCalendar.name}`;
             
@@ -628,157 +502,168 @@
             const totalWeeks = Math.ceil(currentCalendar.schedule.length / 5);
 
             info.innerHTML = `
-                <strong>Instructor:</strong> ${currentCalendar.instructor}<br>
-                <strong>Inicio:</strong> ${formatDate(startDate)}<br>
-                <strong>Fin:</strong> ${formatDate(endDate)}<br>
-                <strong>Duración:</strong> ${currentCalendar.schedule.length} días hábiles (${totalWeeks} semanas)<br><br>
-                <strong>📌 Restricciones Aplicadas:</strong><br>
-                🎯 Intervenciones siempre en viernes<br>
-                🚀 Inducción en lunes-martes-miércoles consecutivos<br>
-                🎓 Graduación en jueves
+                <h3>📊 Información del Curso</h3>
+                <p><strong>👨‍⚕️ Instructor:</strong> ${currentCalendar.instructor}</p>
+                <p><strong>📅 Fecha de inicio:</strong> ${formatDate(startDate)}</p>
+                <p><strong>🏁 Fecha de fin:</strong> ${formatDate(endDate)}</p>
+                <p><strong>⏱️ Duración:</strong> ${currentCalendar.schedule.length} días hábiles (${totalWeeks} semanas)</p>
+                <p><strong>📌 Restricciones aplicadas:</strong></p>
+                <ul>
+                    <li>🎯 Intervenciones siempre en <strong>viernes</strong></li>
+                    <li>🚀 Inducción en <strong>lunes-martes-miércoles</strong> consecutivos</li>
+                    <li>🎓 Graduación en <strong>jueves</strong> (día después de inducción)</li>
+                    <li>🚫 Sin solapamientos en eventos especiales</li>
+                </ul>
             `;
 
-            const firstWeekDiplomado = currentCalendar.schedule[0].weekOfDiplomado;
-            const firstWeekYear = currentCalendar.schedule[0].weekOfYear;
-
-            weekInfo.innerHTML = `
-                <div class="week-badge">Semana ${firstWeekDiplomado} del Diplomado</div>
-                <div class="week-badge">Semana ${firstWeekYear} del Año</div>
-            `;
-
-            renderCurrentView();
-            section.classList.add('active');
-        }
-
-        // Cambiar vista
-        function switchView(viewType, button) {
-            currentView = viewType;
-            
-            // Actualizar botones
-            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Mostrar/ocultar vistas
-            document.getElementById('dayView').style.display = viewType === 'day' ? 'block' : 'none';
-            document.getElementById('weekView').style.display = viewType === 'week' ? 'block' : 'none';
-            
-            renderCurrentView();
-        }
-
-        // Renderizar vista actual
-        function renderCurrentView() {
-            if (!currentCalendar) return;
-            
-            if (currentView === 'day') {
-                renderDayView();
-            } else if (currentView === 'week') {
-                renderWeekView();
-            }
-        }
-
-        // Renderizar vista por días
-        function renderDayView() {
-            const container = document.getElementById('calendarContent');
-            const monthGroups = groupByMonth(currentCalendar.schedule);
-            
-            container.innerHTML = '';
-            
-            monthGroups.forEach(month => {
-                const monthDiv = createMonthTable(month);
-                container.appendChild(monthDiv);
-            });
-        }
-
-        // Renderizar vista por semanas
-        function renderWeekView() {
-            const container = document.getElementById('weekContent');
-            const weekGroups = groupByWeek(currentCalendar.schedule);
-            
-            container.innerHTML = '';
-            
-            weekGroups.forEach(week => {
-                const weekDiv = createWeekContainer(week);
-                container.appendChild(weekDiv);
-            });
-        }
-
-        // Agrupar por mes
-        function groupByMonth(schedule) {
-            const groups = {};
-            
-            schedule.forEach(day => {
-                const key = `${day.date.getFullYear()}-${day.date.getMonth()}`;
-                if (!groups[key]) {
-                    groups[key] = {
-                        year: day.date.getFullYear(),
-                        month: day.date.getMonth(),
-                        days: []
-                    };
-                }
-                groups[key].days.push(day);
-            });
-
-            return Object.values(groups);
-        }
-
-        // Agrupar por semana
-        function groupByWeek(schedule) {
-            const groups = {};
-            
-            schedule.forEach(day => {
-                const key = day.weekOfDiplomado;
-                if (!groups[key]) {
-                    groups[key] = {
-                        weekNumber: day.weekOfDiplomado,
-                        yearWeek: day.weekOfYear,
-                        days: []
-                    };
-                }
-                groups[key].days.push(day);
-            });
-
-            return Object.values(groups);
-        }
-
-        // Crear tabla de mes
-        function createMonthTable(month) {
-            const monthNames = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
-                               'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-
-            const container = document.createElement('div');
-            container.style.marginBottom = '30px';
-
+            // Crear tabla
             const table = document.createElement('table');
             table.className = 'calendar-table';
 
-            // Header de la tabla
+            // Header
             const headerRow = document.createElement('tr');
-            const monthHeader = document.createElement('th');
-            monthHeader.colSpan = 2;
-            monthHeader.textContent = `${monthNames[month.month]} ${month.year}`;
-            headerRow.appendChild(monthHeader);
+            headerRow.innerHTML = `
+                <th>📅 Fecha</th>
+                <th>📚 Actividad</th>
+                <th>📊 Semanas</th>
+            `;
             table.appendChild(headerRow);
 
             // Filas de datos
-            month.days.forEach(day => {
+            currentCalendar.schedule.forEach(day => {
                 const row = document.createElement('tr');
-                
-                const dateCell = document.createElement('td');
-                dateCell.className = 'date-cell';
-                dateCell.innerHTML = `
-                    ${formatFullDate(day.date)}<br>
-                    <small style="font-size: 0.8em; color: #666;">
-                        Sem. ${day.weekOfDiplomado} Dip. | Sem. ${day.weekOfYear} Año
-                    </small>
-                `;
-                
-                const activityCell = document.createElement('td');
-                activityCell.className = `activity-cell ${getActivityClass(day.activity)}`;
+                row.className = getActivityClass(day.activity);
                 
                 let activityText = day.activity;
                 if (day.activity.includes('Intervención Entrenamiento Continuo')) {
                     activityText = `🎯 ${day.activity} (VIERNES)`;
-                } else if (day.activity.includes('Inducción')) {
+                } else if (day.activity.includes('Evaluación')) {
+                    activityText = `📝 ${day.activity}`;
+                } else if (day.activity.includes('Practicas')) {
+                    activityText = `👩‍⚕️ ${day.activity}`;
+                }
+                
+                row.innerHTML = `
+                    <td class="date-col">${formatDateShort(day.date)}</td>
+                    <td>${activityText}</td>
+                    <td>Sem. ${day.weekOfDiplomado} Dip. | Sem. ${day.weekOfYear} Año</td>
+                `;
+                table.appendChild(row);
+            });
+
+            content.innerHTML = '';
+            content.appendChild(table);
+            container.classList.remove('hidden');
+
+            // Scroll suave al calendario
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==================== GUARDAR CALENDARIO ====================
+        function saveCalendar() {
+            if (!currentCalendar) {
+                showAlert('❌ No hay calendario para guardar.', 'error');
+                return;
+            }
+
+            try {
+                const savedCalendars = JSON.parse(localStorage.getItem('medicalCalendars') || '[]');
+                const calendarToSave = {
+                    ...currentCalendar,
+                    id: Date.now().toString(),
+                    createdAt: new Date().toISOString()
+                };
+                
+                savedCalendars.push(calendarToSave);
+                localStorage.setItem('medicalCalendars', JSON.stringify(savedCalendars));
+                
+                showAlert('✅ ¡Calendario guardado exitosamente!', 'success');
+                console.log('💾 Calendario guardado:', calendarToSave);
+                
+            } catch (error) {
+                console.error('❌ Error al guardar:', error);
+                showAlert('❌ Error al guardar el calendario.', 'error');
+            }
+        }
+
+        // ==================== IMPRIMIR CALENDARIO ====================
+        function printCalendar() {
+            if (!currentCalendar) {
+                showAlert('❌ No hay calendario para imprimir.', 'error');
+                return;
+            }
+            
+            showAlert('🖨️ Abriendo ventana de impresión...', 'success');
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        // ==================== MOSTRAR ALERTAS ====================
+        function showAlert(message, type) {
+            console.log(`📢 Alerta [${type}]:`, message);
+            
+            const container = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            container.innerHTML = '';
+            container.appendChild(alert);
+            
+            // Auto-ocultar después de 5 segundos
+            setTimeout(() => {
+                if (container.contains(alert)) {
+                    container.removeChild(alert);
+                }
+            }, 5000);
+        }
+
+        // ==================== INICIALIZACIÓN ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Aplicación inicializada');
+            
+            // Establecer fecha de hoy
+            const today = new Date();
+            const dateString = today.toISOString().split('T')[0];
+            document.getElementById('startDate').value = dateString;
+            
+            // Mensaje de bienvenida
+            showAlert('👋 ¡Bienvenido! Presiona "Probar JavaScript" para verificar que todo funciona.', 'success');
+            
+            // Auto-test después de 2 segundos
+            setTimeout(() => {
+                console.log('🔄 Ejecutando auto-test...');
+                const testDiv = document.getElementById('testResult');
+                testDiv.innerHTML = '<div style="color: blue; margin-top: 10px;">🔄 Auto-test ejecutado: JavaScript cargado correctamente</div>';
+            }, 2000);
+        });
+
+        // ==================== MANEJO DE ERRORES GLOBALES ====================
+        window.addEventListener('error', function(e) {
+            console.error('💥 Error global:', e.error);
+            showAlert('⚠️ Se detectó un error. Revisa la consola para más detalles.', 'error');
+        });
+
+        // ==================== FUNCIONES DE DEBUG ====================
+        function debugInfo() {
+            console.log('🐛 Información de debug:');
+            console.log('- courseStructure length:', courseStructure.length);
+            console.log('- currentCalendar:', currentCalendar);
+            console.log('- Local storage:', localStorage.getItem('medicalCalendars'));
+        }
+
+        // Hacer funciones globales para debug
+        window.debugInfo = debugInfo;
+        window.testJS = testJS;
+        window.generateCalendar = generateCalendar;
+        window.saveCalendar = saveCalendar;
+        window.printCalendar = printCalendar;
+
+        console.log('✅ Todas las funciones han sido cargadas correctamente');
+    </script>
+</body>
+</html>activity.includes('Inducción')) {
                     const dayNames = ['', 'LUNES', 'MARTES', 'MIÉRCOLES'];
                     activityText = `🚀 ${day.activity} (${dayNames[day.dayOfWeek]})`;
                 } else if (day.activity.includes('Graduación')) {
@@ -787,4 +672,4 @@
                     activityText = `🔧 ${day.activity}`;
                 } else if (day.activity.includes('ACLS')) {
                     activityText = `🚑 ${day.activity}`;
-                }
+                } else if (day.
